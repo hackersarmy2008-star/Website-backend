@@ -1,7 +1,7 @@
 const Database = require('better-sqlite3');
 const path = require('path');
 
-const dbPath = path.join(__dirname, 'database.sqlite');
+const dbPath = process.env.DB_PATH || path.join(__dirname, 'database.sqlite');
 const db = new Database(dbPath);
 
 const phone = process.argv[2];
@@ -35,6 +35,12 @@ try {
   console.log(`- Admin Status: Yes`);
   console.log('\nYou can now login and access the admin panel at /admin.html');
   
+} catch (error) {
+  console.error('❌ Error:', error.message);
+  process.exit(1);
+} finally {
+  db.close();
+}  
 } catch (error) {
   console.error('❌ Error:', error.message);
   process.exit(1);
